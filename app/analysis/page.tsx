@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -79,10 +80,15 @@ export default function AnalysisPage() {
       <div className="card">
         <h2 className="section-title">Global Analysis</h2>
         <div className="btn-row">
-        <button className="btn" disabled>
-          Entrepreneurship
-        </button>
-      </div>
+          <Link className="btn secondary" href="/fill/entrepreneurship">
+            Back to questionnaire
+          </Link>
+        </div>
+        <div className="btn-row">
+          <button className="btn" disabled>
+            Entrepreneurship
+          </button>
+        </div>
       </div>
 
       {error && <div className="card">Failed to load analysis: {error}</div>}

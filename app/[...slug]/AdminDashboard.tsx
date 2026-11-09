@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ALL_TYPES } from '@/lib/questionnaires/definitions';
+import { getDef } from '@/lib/questionnaires/definitions';
 
 interface ResponseRow {
   id: string;
@@ -90,7 +91,7 @@ export default function AdminDashboard({ loginPath }: { loginPath: string }) {
     }
   }
 
-  const activeDef = ALL_TYPES.find((d) => d.key === activeType)!;
+  const activeDef = getDef('entrepreneurship')!;
 
   // Pick a couple of representative columns per type for the quick-glance table.
   function previewColumns(row: ResponseRow): { label: string; value: string }[] {
@@ -116,9 +117,14 @@ export default function AdminDashboard({ loginPath }: { loginPath: string }) {
           <h2 className="section-title" style={{ border: 'none', margin: 0 }}>
             ARUSHA TECHNICAL COLLEGE — Admin Dashboard
           </h2>
-          <button className="btn ghost" onClick={handleLogout}>
-            Log out
-          </button>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <Link className="btn ghost" href="/fill/entrepreneurship">
+              Back to questionnaire
+            </Link>
+            <button className="btn ghost" onClick={handleLogout}>
+              Log out
+            </button>
+          </div>
         </div>
 
         <h3 style={{ marginTop: 16 }}>Questionnaire type</h3>
