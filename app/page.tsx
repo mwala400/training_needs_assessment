@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { getDef } from '@/lib/questionnaires/definitions';
 import QrCode from '@/components/QrCode';
