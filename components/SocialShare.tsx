@@ -130,7 +130,7 @@ export default function SocialShare({ path = '/fill/entrepreneurship', title }: 
             className="share-btn"
             onClick={() => (platform === 'copy' ? handleCopy() : share(platform))}
           >
-            <span className="share-icon" dangerouslySetInnerHTML={{ __html: icons[platform] }} />
+            <span className="share-icon" dangerouslySetInnerHTML={{ __html: `<svg viewBox="0 0 24 24" width="20" height="20">${icons[platform]}</svg>` }} />
             <span>{labels[platform]}</span>
           </button>
         ))}

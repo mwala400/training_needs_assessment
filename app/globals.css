@@ -138,20 +138,29 @@ table.admin-table th { background: #eef1f3; }
 }
 .share-card .share-btn {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   background: #fff;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 10px;
-  font-size: 12px;
-  font-weight: 600;
+  border-radius: 12px;
+  padding: 8px 4px;
+  font-size: 11px;
+  font-weight: 700;
   color: var(--text);
   cursor: pointer;
   justify-content: center;
 }
 .share-card .share-btn:hover { border-color: var(--tz-blue); background: #f4f6f5; }
-.share-card .share-icon { width: 20px; height: 20px; display: inline-block; }
+.share-card .share-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #eef1f3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 .share-card .share-icon path { transition: fill 0.2s; }
 .share-card .share-link-input {
   width: 100%;
