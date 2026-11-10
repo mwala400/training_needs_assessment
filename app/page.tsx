@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { getDef } from '@/lib/questionnaires/definitions';
-import QrCode from '@/components/QrCode';
+import SocialShare from '@/components/SocialShare';
 import { useEffect, useState } from 'react';
 
 const def = getDef('entrepreneurship');
@@ -34,27 +34,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="card">
-        <h3 className="section-title">Share this questionnaire</h3>
-        <p className="muted">Scan the QR code or copy the link to open the questionnaire directly.</p>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-          <QrCode path={`/fill/${def!.slug}`} size={240} />
-          <div style={{ display: 'flex', gap: 8 }}>
-            <span className="muted" style={{ fontSize: 12, wordBreak: 'break-all', maxWidth: 300 }}>
-              {shareUrl || '…'}
-            </span>
-            <button
-              className="btn ghost"
-              onClick={() => {
-                if (!shareUrl) return;
-                navigator.clipboard?.writeText(shareUrl);
-              }}
-            >
-              Copy link
-            </button>
-          </div>
-        </div>
-      </div>
+      <SocialShare url={shareUrl} title="Entrepreneurship Centre — Training Needs Assessment Questionnaire, Arusha Technical College" />
 
       <div className="card">
         <h3 className="section-title">Global Analysis</h3>
