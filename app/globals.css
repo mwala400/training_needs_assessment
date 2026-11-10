@@ -126,6 +126,7 @@ table.admin-table th { background: #eef1f3; }
 
 /* Share card */
 .share-card .section-title { border-bottom: none; }
+.share-qr { display: flex; justify-content: center; margin: 10px 0; }
 .share-card .share-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

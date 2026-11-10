@@ -1,43 +1,67 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import QRCode from 'qrcode';
 
 interface SocialShareProps {
-  url: string;
+  path: string;
   title: string;
 }
 
-export default function SocialShare({ url, title }: SocialShareProps) {
+export default function SocialShare({ path = '/fill/entrepreneurship', title }: SocialShareProps) {
+  const [shareUrl, setShareUrl] = useState('');
+  const [qrSvg, setQrSvg] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
+  useEffect(() => {
+    setShareUrl(typeof window !== 'undefined' ? `${window.location.origin}${path}` : path);
+  }, [path]);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      if (!shareUrl) return;
+      try {
+        const data = await QRCode.toString(shareUrl, {
+          type: 'svg',
+          width: 220,
+          margin: 2,
+          color: { dark: '#000000', light: '#ffffff' }
+        });
+        if (active) setQrSvg(data);
+      } catch {
+        if (active) setQrSvg(null);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [shareUrl]);
+
   const handleCopy = useCallback(async () => {
-    await navigator.clipboard?.writeText(url);
+    await navigator.clipboard?.writeText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  }, [url]);
+  }, [shareUrl]);
 
   const share = useCallback(
     (platform: string) => {
-      if (typeof navigator.share === 'function' && platform === 'web') {
-        navigator.share({ title, url });
-        return;
-      }
       const shareUrls: Record<string, string> = {
-        whatsapp: `https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`,
-        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+        whatsapp: `https://wa.me/?text=${encodeURIComponent(`${title} ${shareUrl}`)}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
         instagram: `https://www.instagram.com`,
-        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-        tiktok: `https://www.tiktok.com/upload?url=${encodeURIComponent(url)}`,
-        twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`${title} ${url}`)}`,
-        email: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(url)}`,
-        sms: `sms:?body=${encodeURIComponent(`${title} ${url}`)}`
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+        tiktok: `https://www.tiktok.com/upload?url=${encodeURIComponent(shareUrl)}`,
+        twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`${title} ${shareUrl}`)}`,
+        email: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(shareUrl)}`,
+        sms: `sms:?body=${encodeURIComponent(`${title} ${shareUrl}`)}`
       };
       const target = shareUrls[platform];
       if (target) {
         window.open(target, '_blank', 'noopener,noreferrer');
       }
     },
-    [title, url]
+    [title, shareUrl]
   );
 
   const icons: Record<string, string> = {
@@ -78,23 +102,44 @@ export default function SocialShare({ url, title }: SocialShareProps) {
   return (
     <div className="card share-card">
       <h3 className="section-title">Share this questionnaire</h3>
-      <p className="muted">Share the link or scan the QR code to open the questionnaire directly.</p>
+      <p className="muted">Scan the QR code or share the link to open the questionnaire directly.</p>
+
+      <div className="share-qr">
+        {qrSvg ? (
+          <div
+            dangerouslySetInnerHTML={{ __html: qrSvg }}
+            style={{
+              width: 220,
+              height: 220,
+              background: '#ffffff',
+              border: '1px solid var(--border)',
+              borderRadius: 8,
+              padding: 8,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          />
+        ) : null}
+      </div>
+
       <div className="share-grid">
         {order.map((platform) => (
           <button
             key={platform}
             className="share-btn"
-            onClick={() => platform === 'copy' ? handleCopy() : share(platform)}
+            onClick={() => (platform === 'copy' ? handleCopy() : share(platform))}
           >
             <span className="share-icon" dangerouslySetInnerHTML={{ __html: icons[platform] }} />
             <span>{labels[platform]}</span>
           </button>
         ))}
       </div>
+
       <input
         readOnly
         className="share-link-input"
-        value={url}
+        value={shareUrl}
         onFocus={(e) => e.currentTarget.select()}
       />
     </div>

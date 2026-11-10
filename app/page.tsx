@@ -3,17 +3,10 @@
 import Link from 'next/link';
 import { getDef } from '@/lib/questionnaires/definitions';
 import SocialShare from '@/components/SocialShare';
-import { useEffect, useState } from 'react';
 
 const def = getDef('entrepreneurship');
 
 export default function HomePage() {
-  const [shareUrl, setShareUrl] = useState('');
-
-  useEffect(() => {
-    setShareUrl(`${window.location.origin}/fill/${def!.slug}`);
-  }, []);
-
   return (
     <main className="container">
       <div className="card">
@@ -34,7 +27,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <SocialShare url={shareUrl} title="Entrepreneurship Centre — Training Needs Assessment Questionnaire, Arusha Technical College" />
+      <SocialShare path={`/fill/${def!.slug}`} title="Entrepreneurship Centre — Training Needs Assessment Questionnaire, Arusha Technical College" />
 
       <div className="card">
         <h3 className="section-title">Global Analysis</h3>
